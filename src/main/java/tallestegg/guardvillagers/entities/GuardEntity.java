@@ -653,7 +653,7 @@ public class GuardEntity extends CreatureEntity implements ICrossbowUser, IRange
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        return !this.isOwner(target) && super.canAttack(target);
+        return !this.isOwner(target) && !(target instanceof VillagerEntity) && super.canAttack(target);
     }
 
     /**
