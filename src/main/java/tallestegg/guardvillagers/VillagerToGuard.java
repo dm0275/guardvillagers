@@ -43,6 +43,7 @@ public class VillagerToGuard {
         ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
         GuardEntity guard = GuardEntityType.GUARD.get().create(entity.world);
         VillagerEntity villager = (VillagerEntity) entity;
+        if (guard == null) return;
         guard.copyLocationAndAnglesFrom(villager);
         guard.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
         int i = GuardEntity.getRandomTypeForBiome(guard.world, guard.getPosition());
