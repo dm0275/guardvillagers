@@ -1,5 +1,6 @@
 package tallestegg.guardvillagers;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -17,6 +18,7 @@ import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.PolarBearEntity;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import tallestegg.guardvillagers.configuration.GuardConfig;
 import tallestegg.guardvillagers.entities.GuardEntity;
@@ -89,12 +91,12 @@ public class HandlerEvents {
             WitchEntity witch = (WitchEntity) event.getEntity();
             if (GuardConfig.WitchesVillager) {
                 witch.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(witch, AbstractVillagerEntity.class, true));
+                witch.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(witch, IronGolemEntity.class, true));
                 witch.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(witch, GuardEntity.class, false));
             }
             if (GuardConfig.IllagersRunFromPolarBears) {
                 witch.goalSelector.addGoal(2, new AvoidEntityGoal<>(witch, PolarBearEntity.class, 6.0F, 1.0D, 1.2D));
             }
-
             if (GuardConfig.RaidAnimals) {
                 if (witch.isRaidActive()) {
                     witch.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(witch, AnimalEntity.class, false));

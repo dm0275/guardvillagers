@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "guardvillagers.refmap.json",
   "mixins": [
-     "ZombieEntityMixin"
+    "MobEntityMixin",
+    "ZombieEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
