@@ -44,15 +44,8 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.IllusionerEntity;
-import net.minecraft.entity.monster.RavagerEntity;
-import net.minecraft.entity.monster.WitchEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.PolarBearEntity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -565,6 +558,14 @@ public class GuardEntity extends CreatureEntity implements ICrossbowUser, IRange
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllagerEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractRaiderEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IllusionerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SkeletonEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermanEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, GhastEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, true, (mob) -> {
+//            return mob instanceof TameableEntity && !((TameableEntity) mob).isTamed();
+            return attackNonTamedEntity(mob);
+        }));
         if (GuardConfig.AttackAllMobs) {
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, true, (mob) -> {
                 return mob instanceof IMob && !GuardConfig.MobBlackList.contains(mob.getEntityString());
@@ -575,6 +576,15 @@ public class GuardEntity extends CreatureEntity implements ICrossbowUser, IRange
         this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
         this.targetSelector.addGoal(5, new HelpVillagerGoal(this));
         this.targetSelector.addGoal(6, new GuardEntity.DefendVillageGuardGoal(this));
+    }
+
+    public boolean attackNonTamedEntity(LivingEntity mob) {
+        if (mob instanceof TameableEntity && !((TameableEntity) mob).isTamed()) {
+            if (!(mob instanceof WolfEntity) && !(mob instanceof CatEntity)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
